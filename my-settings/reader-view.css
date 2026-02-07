@@ -1,0 +1,723 @@
+/* ================================================
+   LINDY READER VIEW v4
+   Target: <style id="user-css"> in template.html (reader iframe)
+   Selector roots: html[data-mode], body[data-font]
+   Cascade: loads BEFORE styles.internals (JS-injected)
+   All overrides use !important to beat styles.internals
+   ================================================ */
+
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+body {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    line-height: 1.6 !important;
+    letter-spacing: -0.015em !important;
+    max-width: 66ch !important;
+    margin: 30px auto 0 auto !important;
+    padding: 24px !important;
+    padding-bottom: 80px !important;
+    font-weight: 420 !important;
+}
+
+
+/* ============================================
+   FONT OVERRIDES
+   Must use [data-font] to beat the base body rule.
+   Extension sets body.dataset.font via JS, and
+   styles.internals injects font-family WITHOUT
+   !important -- so these win.
+   ============================================ */
+
+/* Serif */
+body[data-font="serif"] {
+    font-family: "Newsreader", "Georgia", "Times New Roman", serif !important;
+    letter-spacing: -0.01em !important;
+    -webkit-font-smoothing: auto !important;
+    font-weight: 400 !important;
+    line-height: 1.65 !important;
+}
+
+/* Monospace */
+body[data-font="monospace"] {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    letter-spacing: -0.02em !important;
+    font-weight: 400 !important;
+    font-size: 0.95em !important;
+    line-height: 1.55 !important;
+}
+
+
+/* ============================================
+   CODE & METADATA (always mono regardless of body font)
+   ============================================ */
+code, pre, pre code {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.875em !important;
+}
+
+/* When body is already monospace, don't double-shrink code */
+body[data-font="monospace"] code,
+body[data-font="monospace"] pre code {
+    font-size: 1em !important;
+}
+
+
+/* ============================================
+   ARTICLE TITLE
+   #reader-title is an h1 but needs its own
+   treatment -- the generic h1 margin-top: 3em
+   is for section headings, not the page title.
+   ============================================ */
+#reader-title {
+    font-size: 2.25rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.045em !important;
+    margin: 0 0 0.5em 0 !important;
+    padding: 0 !important;
+    font-weight: 800 !important;
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   SOURCE DOMAIN LINK
+   Default: font-family: Helvetica, Arial, sans-serif
+   Last non-Geist font in the UI.
+   ============================================ */
+#reader-domain {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.8em !important;
+    letter-spacing: 0.03em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 55%) !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 5%) !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-bottom: 1em !important;
+    opacity: 1 !important;
+    transition: color 0.2s ease, background 0.2s ease !important;
+}
+#reader-domain:hover {
+    color: color-mix(in srgb, var(--fg), var(--bg) 20%) !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+}
+
+/* Hide any broken favicon / non-span child inside domain link */
+#reader-domain img,
+#reader-domain picture,
+#reader-domain svg,
+#reader-domain > :not(span) {
+    display: none !important;
+}
+#reader-domain::before {
+    display: none !important;
+}
+#reader-domain::after {
+    display: none !important;
+}
+
+/* Copy button next to domain link */
+#lindy-copy-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    margin-left: 6px !important;
+    border-radius: 4px !important;
+    border: none !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 5%) !important;
+    cursor: pointer !important;
+    opacity: 0.5 !important;
+    transition: opacity 0.15s ease, background 0.15s ease !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+#lindy-copy-btn:hover {
+    opacity: 0.8 !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+}
+#lindy-copy-btn img {
+    width: 13px !important;
+    height: 13px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+
+/* ============================================
+   METADATA ROW
+   #reader-credits, #reader-estimated-time,
+   #published-time, #doi
+   ============================================ */
+#reader-credits,
+#reader-estimated-time,
+#published-time,
+#doi {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.85em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 45%) !important;
+    line-height: 1.6 !important;
+    margin: 0 0 6px 0 !important;
+}
+
+/* Muted separators */
+#reader-credits:not(:empty)::after,
+#published-time:not(:empty)::before {
+    color: color-mix(in srgb, var(--fg), var(--bg) 65%) !important;
+    margin: 0 0.5em !important;
+}
+
+
+/* ============================================
+   METADATA / CONTENT SEPARATOR (HR)
+   Default: background-color: var(--bd) (full contrast)
+   ============================================ */
+hr {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+    height: 1px !important;
+    border: none !important;
+    margin: 1.5em 0 2em 0 !important;
+}
+
+
+/* ============================================
+   PARAGRAPHS
+   ============================================ */
+p {
+    margin-bottom: 1.5em !important;
+}
+
+/* Lead paragraph (Readability replaces #reader-content with .page #readability-page-1) */
+.page > p:first-of-type,
+#readability-page-1 > p:first-of-type {
+    font-size: 1.1em !important;
+    line-height: 1.55 !important;
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   HEADINGS
+   ============================================ */
+h1, h2, h3, h4 {
+    font-weight: 700 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--fg) !important;
+}
+h1 {
+    font-size: 2.25rem !important;
+    line-height: 1.1 !important;
+    margin-top: 3em !important;
+    margin-bottom: 0.75em !important;
+}
+h2 {
+    font-size: 1.75rem !important;
+    line-height: 1.2 !important;
+    margin-top: 2.5em !important;
+    margin-bottom: 0.6em !important;
+}
+h3 {
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+    margin-top: 1.75em !important;
+    margin-bottom: 0.5em !important;
+}
+h4 {
+    font-size: 1.1rem !important;
+    line-height: 1.4 !important;
+    margin-top: 1.5em !important;
+    margin-bottom: 0.4em !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+
+
+/* ============================================
+   LINKS
+   ============================================ */
+a {
+    color: var(--lk) !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 4px !important;
+    text-decoration-color: color-mix(in srgb, var(--lk), transparent 60%) !important;
+    transition: text-decoration-color 0.15s ease, background 0.15s ease !important;
+}
+a:hover {
+    text-decoration-color: var(--lk) !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 4%) !important;
+    border-radius: 2px !important;
+}
+
+/* Visited links -- desaturated toward foreground */
+a:visited {
+    color: color-mix(in srgb, var(--lk), var(--fg) 30%) !important;
+}
+
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+pre {
+    white-space: pre-wrap;
+    margin: 1.5em 0 !important;
+}
+pre code {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 6%);
+    color: var(--fg);
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 10%);
+    display: block;
+    padding: 16px 20px !important;
+    border-radius: 8px !important;
+    overflow-x: auto;
+    line-height: 1.5 !important;
+}
+code {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 7%);
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+}
+
+
+/* ============================================
+   BLOCKQUOTE & ASIDE
+   ============================================ */
+blockquote {
+    padding: 0 !important;
+    padding-inline-start: 2.5ch !important;
+    border-inline-start: 3px solid color-mix(in srgb, var(--bg), var(--fg) 15%) !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 25%) !important;
+    margin: 1.5em 0 !important;
+}
+aside {
+    color: color-mix(in srgb, var(--fg), var(--bg) 20%) !important;
+}
+
+
+/* ============================================
+   TEXT HIERARCHY
+   ============================================ */
+
+/* Secondary: captions */
+figcaption {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.8em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 45%) !important;
+    margin-top: 0.75em !important;
+    line-height: 1.4 !important;
+}
+
+/* Tertiary: footnotes */
+small, sup, sub {
+    color: color-mix(in srgb, var(--fg), var(--bg) 50%) !important;
+}
+
+
+/* ============================================
+   TABLES
+   ============================================ */
+table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 1.5em 0 !important;
+    font-size: 0.925em !important;
+}
+th, td {
+    padding: 10px 14px !important;
+    text-align: left !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+}
+th {
+    font-weight: 600 !important;
+    font-size: 0.85em !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 15%) !important;
+}
+tr:hover {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 3%) !important;
+}
+
+
+/* ============================================
+   IMAGES & FIGURES
+   ============================================ */
+img {
+    margin-top: 1.5em !important;
+    margin-bottom: 1.5em !important;
+    border-radius: 8px !important;
+    max-width: 100% !important;
+}
+html[data-mode$="dark"] img {
+    opacity: 0.9;
+}
+
+/* Inline math images (Wikipedia) — undo global img margins */
+img[class*="fallback-image-inline"] {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline !important;
+    vertical-align: middle !important;
+    border-radius: 0 !important;
+}
+
+/* Display/block math images */
+img[class*="fallback-image-display"] {
+    margin: 0.75em auto !important;
+    display: block !important;
+    border-radius: 0 !important;
+}
+
+/* MathML elements */
+math {
+    color: var(--fg) !important;
+}
+math[display="block"] {
+    display: block !important;
+    margin: 0.75em 0 !important;
+}
+
+/* Dark theme: invert math images so black-on-white becomes white-on-dark */
+html[data-mode$="dark"] img[class*="fallback-image"] {
+    filter: invert(1) hue-rotate(180deg) !important;
+}
+
+figure {
+    margin: 2em 0 !important;
+    padding: 0 !important;
+}
+
+
+/* ============================================
+   LISTS
+   ============================================ */
+ul, ol {
+    padding-inline-start: 2.5ch !important;
+    margin-bottom: 1.5em !important;
+}
+li {
+    margin-bottom: 0.4em !important;
+}
+li::marker {
+    color: color-mix(in srgb, var(--fg), var(--bg) 40%) !important;
+}
+
+
+/* ============================================
+   DEFINITION LISTS
+   ============================================ */
+dl {
+    margin: 1.5em 0 !important;
+}
+dt {
+    font-weight: 600 !important;
+    color: var(--fg) !important;
+    margin-top: 1em !important;
+}
+dd {
+    margin-inline-start: 2.5ch !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 10%) !important;
+}
+
+
+/* ============================================
+   DETAILS / SUMMARY
+   ============================================ */
+details {
+    margin: 1.5em 0 !important;
+    padding: 0 !important;
+}
+summary {
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    color: var(--fg) !important;
+    padding: 0.5em 0 !important;
+    list-style: none !important;
+    transition: color 0.15s ease !important;
+}
+summary::-webkit-details-marker {
+    display: none !important;
+}
+summary::before {
+    content: "+" !important;
+    display: inline-block !important;
+    width: 1.5em !important;
+    font-family: "Geist Mono", monospace !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 40%) !important;
+    transition: transform 0.2s ease !important;
+}
+details[open] summary::before {
+    content: "-" !important;
+}
+
+
+/* ============================================
+   HIGHLIGHTS
+   Default --hg: #ffff81 (neon yellow, terrible on dark)
+   Theme-aware replacement using color-mix.
+   ============================================ */
+mark.hghlght {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 18%) !important;
+    color: var(--fg) !important;
+    border-radius: 2px !important;
+    padding: 1px 2px !important;
+    box-decoration-break: clone !important;
+    -webkit-box-decoration-break: clone !important;
+}
+
+/* Warmer tint on light themes where subtle gray may be too faint */
+html[data-mode="light"] mark.hghlght,
+html[data-mode="sepia"] mark.hghlght {
+    background-color: rgba(255, 220, 100, 0.3) !important;
+}
+
+
+/* ============================================
+   PAGE SEPARATOR (multi-page articles)
+   Default: rgba(125, 125, 125, 0.1) -- not theme-aware
+   ============================================ */
+.page-separator {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 4%) !important;
+    border-top: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+    padding: 1.5em 0 !important;
+    text-align: center !important;
+    font-family: "Geist Mono", ui-monospace, monospace !important;
+    font-size: 0.8em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 50%) !important;
+}
+
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+    background-color: color-mix(in srgb, var(--fg), var(--bg) 82%) !important;
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   SURVIVING TOC ELEMENTS
+   Readability preserves inline TOCs with classes
+   like .toc, .mw-toc, .table-of-contents.
+   ============================================ */
+.toc,
+.table-of-contents,
+.mw-toc,
+[class*="table-of-contents"] {
+    border-radius: 8px !important;
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 3%) !important;
+    padding: 1em 1.5em !important;
+    margin: 1.5em 0 !important;
+}
+
+.toc li,
+.table-of-contents li,
+.mw-toc li,
+[class*="table-of-contents"] li {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.85em !important;
+    list-style: none !important;
+    padding-inline-start: 1em !important;
+    margin-bottom: 0.3em !important;
+}
+
+.toc a,
+.table-of-contents a,
+.mw-toc a,
+[class*="table-of-contents"] a {
+    color: color-mix(in srgb, var(--fg), var(--bg) 35%) !important;
+    text-decoration: none !important;
+    transition: color 0.15s ease !important;
+}
+.toc a:hover,
+.table-of-contents a:hover,
+.mw-toc a:hover,
+[class*="table-of-contents"] a:hover {
+    color: var(--fg) !important;
+}
+
+/* TOC heading / title */
+.toc > :first-child,
+.table-of-contents > :first-child,
+.mw-toc .toctitle,
+[class*="table-of-contents"] > :first-child {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    font-size: 0.8em !important;
+    letter-spacing: 0.04em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 25%) !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+    padding-bottom: 0.5em !important;
+    margin-bottom: 0.75em !important;
+}
+
+/* Wikipedia .tocnumber */
+.tocnumber {
+    color: color-mix(in srgb, var(--fg), var(--bg) 55%) !important;
+    margin-right: 0.5em !important;
+    font-size: 0.9em !important;
+}
+
+
+/* ============================================
+   AUTO-GENERATED TOC (#lindy-toc)
+   Built by the "Toggle Outline" user action.
+   ============================================ */
+#lindy-toc {
+    position: sticky !important;
+    top: 1em !important;
+    float: left !important;
+    width: 175px !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    margin-left: -232px !important;
+    margin-right: 0 !important;
+    margin-top: 1em !important;
+    margin-bottom: 2em !important;
+    z-index: 10 !important;
+    border-radius: 10px !important;
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 2%) !important;
+    padding: 1em 1.25em !important;
+}
+
+/* Hide TOC sidebar on narrow screens */
+@media (max-width: 1100px) {
+    #lindy-toc {
+        display: none !important;
+    }
+}
+
+#lindy-toc summary {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    text-transform: uppercase !important;
+    font-size: 0.85em !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 40%) !important;
+    padding: 0 !important;
+}
+
+#lindy-toc summary::before {
+    color: color-mix(in srgb, var(--fg), var(--bg) 55%) !important;
+}
+
+#lindy-toc nav ol {
+    list-style: none !important;
+    padding-inline-start: 0 !important;
+    margin: 0.75em 0 0.25em 0 !important;
+}
+
+#lindy-toc nav li {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.85em !important;
+    margin-bottom: 0.6em !important;
+    padding-bottom: 0.6em !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 6%) !important;
+    list-style: none !important;
+}
+
+#lindy-toc nav li:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+}
+
+#lindy-toc nav li[data-level="3"] {
+    padding-inline-start: 1.5em !important;
+}
+#lindy-toc nav li[data-level="4"] {
+    padding-inline-start: 3em !important;
+}
+
+#lindy-toc nav a {
+    color: color-mix(in srgb, var(--fg), var(--bg) 35%) !important;
+    text-decoration: none !important;
+    transition: color 0.15s ease, font-weight 0.15s ease !important;
+}
+#lindy-toc nav a:hover {
+    color: var(--fg) !important;
+}
+
+#lindy-toc nav a.lindy-toc-active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
+
+
+/* ============================================
+   KBD ELEMENTS (keyboard shortcuts in tech articles)
+   ============================================ */
+kbd {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.85em !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 6%) !important;
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 12%) !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+}
+
+
+/* ============================================
+   ABBREVIATIONS
+   ============================================ */
+abbr[title] {
+    text-decoration: underline dotted color-mix(in srgb, var(--fg), var(--bg) 50%) !important;
+    text-underline-offset: 3px !important;
+    cursor: help !important;
+}
+
+
+/* ============================================
+   FOOTNOTE REFERENCES
+   ============================================ */
+sup > a,
+.footnote-ref {
+    font-size: 0.8em !important;
+    text-decoration: none !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 35%) !important;
+    transition: color 0.15s ease !important;
+}
+sup > a:hover,
+.footnote-ref:hover {
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   SCROLLBAR (dark themes only)
+   ============================================ */
+html[data-mode$="dark"] ::-webkit-scrollbar {
+    width: 8px;
+}
+html[data-mode$="dark"] ::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+html[data-mode$="dark"] ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--bg), var(--fg) 18%);
+    border-radius: 4px;
+}
+html[data-mode$="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--bg), var(--fg) 28%);
+}
+
+
+/* ============================================
+   TRANSITIONS
+   ============================================ */
+a, button, summary {
+    transition: all 0.15s ease !important;
+}

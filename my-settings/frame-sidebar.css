@@ -1,0 +1,244 @@
+/* ================================================
+   LINDY SIDEBAR v4
+   Target: <style> injected into index.html (top frame)
+   Selector root: body[data-mode]
+   Variables: --fg, --bg, --fg-selected, --border-color
+   
+   Extension defaults that break on dark themes:
+     #font-utils, #image-utils bg: #fbfbfb
+     tr color: #333
+     #font-details span[data-id] color: initial (black)
+     checkbox checked bg: rgba(0,0,0,0.1)
+     --color-font-utils-light: #a2a2a2
+     --border-color: rgba(181,181,181,0.3)
+   ================================================ */
+
+
+/* ============================================
+   BASE
+   ============================================ */
+body {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+
+/* ============================================
+   TOOLBAR CONTAINER
+   ============================================ */
+#toolbar-container {
+    box-shadow: 1px 0 0 0 color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+}
+
+
+/* ============================================
+   TOOLBAR BUTTONS
+   ============================================ */
+#toolbar > span {
+    border-bottom-color: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+    transition: opacity 0.15s ease !important;
+}
+#toolbar > span:hover {
+    opacity: 0.7 !important;
+}
+
+
+/* ============================================
+   PANELS: font-utils & image-utils
+   Override all hardcoded colors.
+   ============================================ */
+#font-utils,
+#image-utils {
+    background-color: var(--bg) !important;
+    box-shadow: none !important;
+    color: var(--fg) !important;
+    border-radius: 8px !important;
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 20%) !important;
+}
+
+/* All table rows -- override hardcoded #333 */
+#font-utils tr,
+#image-utils tr {
+    color: var(--fg) !important;
+}
+
+/* Row separators */
+#font-utils tr:not(:last-child),
+#image-utils tr:not(:last-child) {
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+}
+
+/* All text/icons inside panels */
+#font-utils td,
+#font-utils span,
+#font-utils label,
+#image-utils td,
+#image-utils span,
+#image-utils label {
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   INTERACTIVE ELEMENTS (+/- buttons, alignment, etc.)
+   data-cmd spans inside panels
+   ============================================ */
+#font-utils [data-cmd],
+#image-utils [data-cmd] {
+    color: var(--fg) !important;
+    transition: opacity 0.15s ease !important;
+}
+#font-utils [data-cmd]:hover,
+#image-utils [data-cmd]:hover {
+    opacity: 0.6 !important;
+}
+
+
+/* ============================================
+   FONT DETAILS ROW
+   "Font: 16  Width: 600  Height: 28.8"
+   Structure: #font-details > td > div > span > span[data-id]
+   
+   BUG: Extension sets span[data-id] { color: initial }
+   which resets to BLACK -- invisible on dark themes.
+   Must target all three levels to fully override.
+   ============================================ */
+#font-details div,
+#font-details div span,
+#font-details div span[data-id] {
+    color: color-mix(in srgb, var(--fg), var(--bg) 30%) !important;
+}
+
+
+/* ============================================
+   FONT SELECTOR DROPDOWN
+   ============================================ */
+#font-selector {
+    background-color: var(--bg) !important;
+    color: var(--fg) !important;
+    border-radius: 6px !important;
+}
+#font-selector option {
+    background-color: var(--bg) !important;
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   HELP TEXT
+   ============================================ */
+#font-utils p[data-id=help] {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 5%) !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 20%) !important;
+    border-radius: 6px !important;
+}
+
+
+/* ============================================
+   CHECKBOX LABELS
+   Full Width, No Height, Text Align, Column Count,
+   Bionic Reading -- all use input:checked + label
+   Default checked bg: rgba(0,0,0,0.1) -- invisible on dark
+   ============================================ */
+#toolbar input:checked + label,
+#font-utils input:checked + label {
+    background-color: color-mix(in srgb, var(--bg), var(--fg) 15%) !important;
+    color: var(--fg) !important;
+    border-radius: 4px !important;
+}
+
+
+/* ============================================
+   INPUTS (selects, range sliders, number inputs)
+   ============================================ */
+select,
+input[type="range"],
+input[type="number"] {
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 12%) !important;
+    background-color: var(--bg) !important;
+    color: var(--fg) !important;
+    border-radius: 6px !important;
+    transition: border-color 0.15s ease !important;
+}
+select:hover,
+input[type="range"]:hover,
+input[type="number"]:hover {
+    border-color: color-mix(in srgb, var(--bg), var(--fg) 25%) !important;
+}
+select:focus,
+input[type="number"]:focus {
+    border-color: color-mix(in srgb, var(--bg), var(--fg) 35%) !important;
+    outline: none !important;
+}
+
+
+/* ============================================
+   THEME SWATCHES (last row in font-utils)
+   Keep swatch background colors intact,
+   just fix the label text color.
+   ============================================ */
+#font-utils tr:last-child div {
+    color: var(--fg) !important;
+}
+
+/* Active theme indicator checkmark */
+#font-utils span[data-cmd^="color-mode"]::after {
+    color: var(--fg) !important;
+}
+
+
+/* ============================================
+   DESIGN MODE ACTIVE STATE
+   ============================================ */
+[data-cmd="toggle-design-mode"][data-active="true"] {
+    color: var(--fg-selected) !important;
+}
+
+
+/* ============================================
+   NAVIGATION BUTTONS (prev/next page)
+   ============================================ */
+#navigate input {
+    color: var(--fg) !important;
+    transition: opacity 0.2s ease !important;
+}
+#navigate input:hover:not(:disabled) {
+    opacity: 0.7 !important;
+}
+#navigate input:disabled {
+    opacity: 0.15 !important;
+}
+
+
+/* ============================================
+   USER ACTION ICONS
+   Extension default: .custom img has white bg circle + padding.
+   Strip that and tint to match built-in toolbar icons.
+   ============================================ */
+.custom img {
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    opacity: 0.85 !important;
+}
+/* Dark themes: invert black SVG paths to white */
+body[data-mode$="dark"] .custom img {
+    filter: invert(1) !important;
+}
+/* Light/sepia: keep dark, slight fade to match toolbar icon weight */
+body[data-mode="light"] .custom img,
+body[data-mode="sepia"] .custom img {
+    filter: none !important;
+    opacity: 0.7 !important;
+}
+
+
+/* ============================================
+   READING GUIDE LINE
+   Default: var(--guide-color) = rgba(181,181,181,0.2)
+   ============================================ */
+#guide {
+    background: color-mix(in srgb, var(--fg), transparent 90%) !important;
+}
