@@ -10,6 +10,10 @@
 /* ============================================
    BASE TYPOGRAPHY
    ============================================ */
+html {
+    scroll-behavior: smooth !important;
+}
+
 body {
     font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     -webkit-font-smoothing: antialiased !important;
@@ -102,11 +106,15 @@ body[data-font="monospace"] pre code {
     align-items: center !important;
     margin-bottom: 1em !important;
     opacity: 1 !important;
+    cursor: pointer !important;
     transition: color 0.2s ease, background 0.2s ease !important;
 }
 #reader-domain:hover {
     color: color-mix(in srgb, var(--fg), var(--bg) 20%) !important;
     background: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+}
+#reader-domain > span:nth-of-type(2) {
+    font-size: 0.9em !important;
 }
 
 /* Hide any broken favicon / non-span child inside domain link */
@@ -122,36 +130,6 @@ body[data-font="monospace"] pre code {
 #reader-domain::after {
     display: none !important;
 }
-
-/* Copy button next to domain link */
-#lindy-copy-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 26px !important;
-    height: 26px !important;
-    margin-left: 6px !important;
-    border-radius: 4px !important;
-    border: none !important;
-    background: color-mix(in srgb, var(--bg), var(--fg) 5%) !important;
-    cursor: pointer !important;
-    opacity: 0.5 !important;
-    transition: opacity 0.15s ease, background 0.15s ease !important;
-    vertical-align: middle !important;
-    flex-shrink: 0 !important;
-}
-#lindy-copy-btn:hover {
-    opacity: 0.8 !important;
-    background: color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
-}
-#lindy-copy-btn img {
-    width: 13px !important;
-    height: 13px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-}
-
 
 /* ============================================
    METADATA ROW
@@ -212,6 +190,7 @@ h1, h2, h3, h4 {
     font-weight: 700 !important;
     letter-spacing: -0.04em !important;
     color: var(--fg) !important;
+    scroll-margin-top: 1em !important;
 }
 h1 {
     font-size: 2.25rem !important;
