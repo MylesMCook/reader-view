@@ -246,7 +246,7 @@ a:visited {
    CODE BLOCKS
    ============================================ */
 pre {
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     margin: 1.5em 0 !important;
 }
 pre code {
@@ -261,6 +261,7 @@ pre code {
 }
 code {
     background-color: color-mix(in srgb, var(--bg), var(--fg) 7%);
+    color: var(--fg) !important;
     border-radius: 4px !important;
     padding: 2px 6px !important;
 }
@@ -308,6 +309,8 @@ table {
     border-collapse: collapse !important;
     margin: 1.5em 0 !important;
     font-size: 0.925em !important;
+    display: block !important;
+    overflow-x: auto !important;
 }
 th, td {
     padding: 10px 14px !important;
@@ -372,6 +375,10 @@ html[data-mode$="dark"] img[class*="fallback-image"] {
 figure {
     margin: 2em 0 !important;
     padding: 0 !important;
+}
+figure img {
+    margin-top: 0.5em !important;
+    margin-bottom: 0 !important;
 }
 
 
@@ -566,10 +573,10 @@ html[data-mode="sepia"] mark.hghlght {
     margin-top: 1em !important;
     margin-bottom: 2em !important;
     z-index: 10 !important;
-    border-radius: 10px !important;
-    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 10%) !important;
+    border-radius: 6px !important;
+    border: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
     background: color-mix(in srgb, var(--bg), var(--fg) 2%) !important;
-    padding: 1em 1.25em !important;
+    padding: 0.75em 1em !important;
 }
 
 /* Hide TOC sidebar on narrow screens */
@@ -580,59 +587,119 @@ html[data-mode="sepia"] mark.hghlght {
 }
 
 #lindy-toc summary {
-    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-    text-transform: uppercase !important;
-    font-size: 0.85em !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    color: color-mix(in srgb, var(--fg), var(--bg) 40%) !important;
-    padding: 0 !important;
+    display: none !important;
 }
 
 #lindy-toc summary::before {
-    color: color-mix(in srgb, var(--fg), var(--bg) 55%) !important;
+    content: none !important;
 }
 
 #lindy-toc nav ol {
     list-style: none !important;
     padding-inline-start: 0 !important;
-    margin: 0.75em 0 0.25em 0 !important;
+    margin: 0.25em 0 !important;
 }
 
 #lindy-toc nav li {
-    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     font-size: 0.85em !important;
     margin-bottom: 0.6em !important;
-    padding-bottom: 0.6em !important;
-    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 6%) !important;
     list-style: none !important;
 }
 
 #lindy-toc nav li:last-child {
     margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-    border-bottom: none !important;
 }
 
 #lindy-toc nav li[data-level="3"] {
-    padding-inline-start: 1.5em !important;
+    padding-inline-start: 1em !important;
 }
 #lindy-toc nav li[data-level="4"] {
-    padding-inline-start: 3em !important;
+    padding-inline-start: 1.75em !important;
 }
 
 #lindy-toc nav a {
     color: color-mix(in srgb, var(--fg), var(--bg) 35%) !important;
     text-decoration: none !important;
-    transition: color 0.15s ease, font-weight 0.15s ease !important;
+    transition: color 0.15s ease, background 0.15s ease !important;
 }
 #lindy-toc nav a:hover {
     color: var(--fg) !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 6%) !important;
+    border-radius: 3px !important;
+    padding: 1px 4px !important;
+    margin: -1px -4px !important;
 }
 
 #lindy-toc nav a.lindy-toc-active {
     color: var(--fg) !important;
-    font-weight: 600 !important;
+}
+
+#lindy-toc nav li:has(a.lindy-toc-active) {
+    border-inline-start: 2px solid var(--fg) !important;
+    padding-inline-start: 0.5em !important;
+}
+
+/* Metadata header */
+#lindy-toc .lindy-meta {
+    margin-bottom: 0.75em !important;
+    padding-bottom: 0.75em !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+}
+
+#lindy-toc .lindy-meta-title {
+    display: none !important;
+}
+
+#lindy-toc .lindy-meta-info {
+    font-family: "Geist Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace !important;
+    font-size: 0.75em !important;
+    color: color-mix(in srgb, var(--fg), var(--bg) 50%) !important;
+    line-height: 1.4 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Progress bar */
+#lindy-toc .lindy-progress {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 0.75em !important;
+    padding-top: 0.75em !important;
+    border-top: 1px solid color-mix(in srgb, var(--bg), var(--fg) 8%) !important;
+}
+
+#lindy-toc .lindy-progress-track {
+    flex: 1 !important;
+    height: 2px !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 12%) !important;
+    border-radius: 2px !important;
+    overflow: hidden !important;
+}
+
+#lindy-toc .lindy-progress-bar {
+    height: 100% !important;
+    width: 0% !important;
+    background: color-mix(in srgb, var(--bg), var(--fg) 35%) !important;
+    border-radius: 2px !important;
+    transition: width 0.15s ease !important;
+}
+
+#lindy-toc .lindy-progress-text {
+    display: none !important;
+}
+
+/* Custom scrollbar for long TOC lists */
+#lindy-toc::-webkit-scrollbar {
+    width: 4px !important;
+}
+#lindy-toc::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--bg), var(--fg) 15%) !important;
+    border-radius: 2px !important;
+}
+#lindy-toc::-webkit-scrollbar-track {
+    background: transparent !important;
 }
 
 
@@ -694,9 +761,4 @@ html[data-mode$="dark"] ::-webkit-scrollbar-thumb:hover {
 }
 
 
-/* ============================================
-   TRANSITIONS
-   ============================================ */
-a, button, summary {
-    transition: all 0.15s ease !important;
-}
+/* (Removed blanket `transition: all` — element-specific transitions above are sufficient) */
