@@ -1,7 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:claude.ai)"
+      "WebFetch(domain:claude.ai)",
+      "WebFetch(domain:simonwillison.net)",
+      "Bash(where:*)",
+      "Bash(winget search:*)",
+      "Bash(scoop search:*)",
+      "Bash(choco search:*)",
+      "Bash(gh release view:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(tasklist:*)",
+      "Bash(wmic process:*)",
+      "Bash(powershell.exe:*)"
     ]
   }
 }
