@@ -8,11 +8,11 @@ Reader View is a browser extension that strips clutter from webpages for clean r
 
 ## Critical Rule
 
-**Do NOT modify any files outside `my-settings/` and `boat_and_rod/`.** The `v2/` and `v3/` directories are the upstream extension source. Only `my-settings/` (user customizations) and `boat_and_rod/` (automation tooling) are editable.
+**Do NOT modify any files outside `my-settings/`.** The `v2/` and `v3/` directories are the upstream extension source. Only `my-settings/` (user customizations) is editable.
 
 ## No Build System
 
-There is no build, test, or lint infrastructure. The extension runs directly from source. Settings can be pushed automatically via `boat_and_rod/browser.py` (see Browser Automation below) or pasted manually into the options page.
+There is no build, test, or lint infrastructure. The extension runs directly from source. Settings are applied by pasting into the extension's options page, or pushed via `chrome.storage.local.set()` through the browser's DevTools/extension APIs.
 
 ## Directory Structure
 
@@ -20,7 +20,6 @@ There is no build, test, or lint infrastructure. The extension runs directly fro
 - **`v2/`** — Legacy Manifest V2 (read-only reference)
 - **`v1/`** — Deprecated Firefox SDK version (ignore)
 - **`my-settings/`** — User customizations (CSS, JSON, preferences)
-- **`boat_and_rod/`** — Browser automation tooling
 
 ## my-settings/
 
@@ -68,42 +67,13 @@ The sandbox imports `document` as `iframe.contentDocument` (the reader article f
 
 **Plugins** are ES modules in `v3/data/reader/plugins/` (tts, note, doi, chapters, qr-code, etc.), loaded dynamically via `plugins.js`.
 
-## Browser Automation (boat_and_rod/)
+## Pushing Settings
 
-`boat_and_rod/browser.py` provides CDP-based Chrome automation with Reader View loaded. Requires `websocket-client` (`pip install websocket-client`).
+Settings from `my-settings/` are pushed to the extension via `chrome.storage.local.set()`. This can be done through the Claude in Chrome connector (browser automation MCP), or manually by pasting into the options page textareas.
 
-**Commands:**
+**Extension ID:** `ecabifbgmdmgdllomnfinbmaellmclnh` (Chrome Web Store)
 
-```
-python boat_and_rod/browser.py start             # Launch Chrome (port 9333)
-python boat_and_rod/browser.py stop              # Stop Chrome
-python boat_and_rod/browser.py status            # Show browser & extension info
-python boat_and_rod/browser.py open <url>        # Navigate to URL
-python boat_and_rod/browser.py js <expression>   # Execute JS, print result
-python boat_and_rod/browser.py screenshot [file] # Capture screenshot
-python boat_and_rod/browser.py click <selector>  # Click element by CSS selector
-python boat_and_rod/browser.py push              # Push CSS/JSON from my-settings/ to extension
-python boat_and_rod/browser.py import            # Import all prefs from reader-view-preferences.json
-python boat_and_rod/browser.py wait [seconds]    # Wait (default: 2s)
-python boat_and_rod/browser.py setup             # One-time: install extension from CWS
-```
-
-**Key details:**
-- Uses port 9333 (configurable via `BROWSER_PORT` env var) to avoid conflicts
-- Extension installed from Chrome Web Store (managed Chrome blocks `--load-extension`)
-- Extension ID: `ecabifbgmdmgdllomnfinbmaellmclnh` (CWS ID, cached in `~/.reader-browser/.extension-id`)
-- Profile stored at `~/.reader-browser/chrome-data/` — extension persists across sessions
-- `push` writes `user-css`, `top-css`, `user-action` via `chrome.storage.local.set()`
-- `import` writes ALL preferences from `my-settings/reader-view-preferences.json`
-
-**First-time setup:**
-1. `python boat_and_rod/browser.py start`
-2. `python boat_and_rod/browser.py setup` — opens CWS page, manually click "Add to Chrome"
-3. `python boat_and_rod/browser.py import` — push all saved preferences
-
-**Showboat** (`uv tool install showboat`) creates executable demo markdown documents for documenting changes. See [simonwillison/showboat](https://github.com/simonw/showboat).
-
-## my-settings/ Files
+**Storage keys:**
 
 | File | Storage key | Description |
 |---|---|---|
